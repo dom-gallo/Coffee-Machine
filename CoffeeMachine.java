@@ -35,8 +35,9 @@ public class CoffeeMachine {
     
     public static void main(String[] args)
     {
+        // Coffee Factory Method
         CoffeeFactory coffeeFactory = new CoffeeFactory();
-        
+        //
         CoffeeMachine coffeeMachine = new CoffeeMachine(550, 400, 540, 120, 9,
                 coffeeFactory.createCoffee("latte"), coffeeFactory.createCoffee("espresso"),
                 coffeeFactory.createCoffee("capp"));
@@ -44,6 +45,7 @@ public class CoffeeMachine {
         
         Scanner sc = new Scanner(System.in);
         
+        //
         coffeeMachine.startMachine(sc);
     
     }
@@ -60,9 +62,11 @@ public class CoffeeMachine {
                     System.out.println("What do you want to buy? 1 - espresso, 2 - latte, 3 - cappuccino: ");
                     String inputChoice = sc.nextLine();
                     
+                    // Declare Coffee object
                     Coffee coffee;
     
                     
+                    // depending on input point to correct instance field object.
                     
                     if (inputChoice.equalsIgnoreCase("1"))
                     {
