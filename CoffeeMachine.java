@@ -10,38 +10,37 @@ public class CoffeeMachine {
     private int currentBeanLevel;
     private int currentCupCount;
     
+    final private Coffee LatteObject;
+    final private Coffee EspressoObject;
+    final private Coffee CappObject;
+    
     // State Variables
     private CurrentState currentState;
     private boolean exit = false;
+
     
-    // Espresso constants
-    final int ESPRESSO_WATER_COST = 250;
-    final int ESPRESSO_BEAN_COST = 16;
-    final int ESPRESSO_MONEY_COST = 4;
-    
-    // Latte constants
-    final int LATTE_WATER_COST = 350;
-    final int LATTE_MILK_COST = 75;
-    final int LATTE_BEAN_COST = 20;
-    final int LATTE_MONEY_COST = 7;
-    
-    // Cappuccino constants
-    final int CAPP_WATER_COST = 200;
-    final int CAPP_MILK_COST = 100;
-    final int CAPP_BEAN_COST = 12;
-    final int CAPP_MONEY_COST = 6;
-    
-    public CoffeeMachine(int startingMoney, int startingWater, int startingMilk, int startingBeans, int startingCups) {
+    public CoffeeMachine(int startingMoney, int startingWater, int startingMilk, int startingBeans, int startingCups,
+                         Coffee Latte, Coffee Espresso, Coffee Capp)
+    {
         this.currentMoney = startingMoney;
         this.currentWaterLevel = startingWater;
         this.currentMilkLevel = startingMilk;
         this.currentBeanLevel = startingBeans;
         this.currentCupCount = startingCups;
         this.currentState = CurrentState.CHOOSE_ACTION;
+        this.LatteObject =  Latte;
+        this.EspressoObject = Espresso;
+        this.CappObject = Capp;
     }
     
-    public static void main(String[] args) {
-        CoffeeMachine coffeeMachine = new CoffeeMachine(550, 400, 540, 120, 9);
+    public static void main(String[] args)
+    {
+        CoffeeFactory coffeeFactory = new CoffeeFactory();
+        
+        CoffeeMachine coffeeMachine = new CoffeeMachine(550, 400, 540, 120, 9,
+                coffeeFactory.createCoffee("latte"), coffeeFactory.createCoffee("espresso"),
+                coffeeFactory.createCoffee("capp"));
+        
         
         Scanner sc = new Scanner(System.in);
         
@@ -49,21 +48,37 @@ public class CoffeeMachine {
     
     }
     
-    public void startMachine(Scanner sc) {
+    public void startMachine(Scanner sc)
+    {
         
-        while (this.currentState != CurrentState.EXIT){
+        while (this.currentState != CurrentState.EXIT)
+        {
             
-            switch (this.currentState) {
+            switch (this.currentState)
+            {
                 case BUY:
                     System.out.println("What do you want to buy? 1 - espresso, 2 - latte, 3 - cappuccino: ");
                     String inputChoice = sc.nextLine();
                     
+                    Coffee coffee;
+    
                     
                     
-                    CoffeeTypes choice = inputChoice.equalsIgnoreCase("1") ? CoffeeTypes.ESPRESSO : inputChoice.equalsIgnoreCase("2") ? CoffeeTypes.LATTE : inputChoice.equalsIgnoreCase("3") ? CoffeeTypes.CAPP : CoffeeTypes.BACK;
-                    if (choice != CoffeeTypes.BACK) {
-                        this.buyCoffee(choice);
+                    if (inputChoice.equalsIgnoreCase("1"))
+                    {
+                        coffee = EspressoObject;
+                    } else if (inputChoice.equalsIgnoreCase("2"))
+                    {
+                        coffee = LatteObject;
+                    } else if (inputChoice.equalsIgnoreCase("3"))
+                    {
+                        coffee = CappObject;
+                    } else {
+                        this.resetState();
+                        break;
                     }
+                    this.buyCoffee(coffee);
+                    
                     this.resetState();
                     break;
                 case FILL:
@@ -108,82 +123,39 @@ public class CoffeeMachine {
         
     }
     
-    public void buyCoffee(CoffeeTypes typeOfCoffee) {
+    public void buyCoffee(Coffee coffeeTypeToBuy)
+    {
         
-        switch (typeOfCoffee){
-            case LATTE:
-                if (currentWaterLevel < LATTE_WATER_COST) {
-                    System.out.println("Sorry not enough water!");
-                    break;
-                }
-                if (currentBeanLevel < LATTE_BEAN_COST) {
-                    System.out.println("Sorry not enough beans!");
-                    break;
-                }
-                if (currentMilkLevel < LATTE_MILK_COST) {
-                    System.out.println("Sorry not enough milk!");
-                    break;
-                }
-                if (currentCupCount  == 0) {
-                    System.out.println("Sorry not enough cups!");
-                    break;
-                }
-    
-                currentWaterLevel -= LATTE_WATER_COST;
-                currentMilkLevel -= LATTE_MILK_COST;
-                currentBeanLevel -= LATTE_BEAN_COST;
-                currentMoney += LATTE_MONEY_COST;
-                currentCupCount--;
-    
-                System.out.println("I have enough resources, making you a coffee!");
-                break;
-            case CAPP:
-                if (currentWaterLevel < CAPP_WATER_COST) {
-                    System.out.println("Sorry not enough water!");
-                    break;
-                }
-                if (currentBeanLevel < CAPP_BEAN_COST) {
-                    System.out.println("Sorry not enough beans!");
-                    break;
-                }
-                if (currentMilkLevel < CAPP_MILK_COST) {
-                    System.out.println("Sorry not enough milk!");
-                    break;
-                }
-                if (currentCupCount == 0) {
-                    System.out.println("Sorry not enough cups");
-                    break;
-                }
-                currentWaterLevel -= CAPP_WATER_COST;
-                currentMilkLevel -= CAPP_MILK_COST;
-                currentBeanLevel -= CAPP_BEAN_COST;
-                currentMoney += CAPP_MONEY_COST;
-                currentCupCount--;
-    
-                System.out.println("I have enough resources, making you a coffee!");
-                break;
-            case ESPRESSO:
-                if (currentWaterLevel < ESPRESSO_WATER_COST) {
-                    System.out.println("Sorry not enough water!");
-                    break;
-                }
-                if (currentBeanLevel < ESPRESSO_BEAN_COST) {
-                    System.out.println("Sorry not enough beans!");
-                    break;
-                }
-                if (currentCupCount == 0) {
-                    System.out.println("Sorry not enough cups!");
-
-                    break;
-                }
-                currentWaterLevel -= ESPRESSO_WATER_COST;
-                currentBeanLevel -= ESPRESSO_BEAN_COST;
-                currentMoney += ESPRESSO_MONEY_COST;
-                currentCupCount--;
-                System.out.println("I have enough resources, making you a coffee!");
-
-                break;
+        
+        if (currentWaterLevel < coffeeTypeToBuy.getWaterCost())
+        {
+            System.out.println("Sorry not enough water!");
+            return;
+           
         }
+        if (currentBeanLevel < coffeeTypeToBuy.getBeanCost())
+        {
+            System.out.println("Sorry not enough beans!");
+            return;
+        }
+        if (currentMilkLevel < coffeeTypeToBuy.getBeanCost())
+        {
+            System.out.println("Sorry not enough milk!");
+            return;
+        }
+        if (currentCupCount  == 0)
+        {
+            System.out.println("Sorry not enough cups!");
+            return;
+        }
+        
+        this.currentWaterLevel -= coffeeTypeToBuy.getWaterCost();
+        this.currentMilkLevel -= coffeeTypeToBuy.getMilkCost();
+        this.currentBeanLevel -= coffeeTypeToBuy.getBeanCost();
+        this.currentMoney += coffeeTypeToBuy.getMoneyCost();
+        this.currentCupCount--;
+
+        System.out.println("I have enough resources, making you a coffee!");
     }
     public int[] fillHandler(Scanner sc){
         
@@ -208,6 +180,7 @@ public class CoffeeMachine {
         this.currentCupCount += ingrediants[3];
         this.resetState();
     }
+    
     public void takeMoney(){
         System.out.println("I gave you " + this.currentMoney);
         this.currentMoney = 0;
