@@ -61,26 +61,16 @@ public class CoffeeMachine {
                 case BUY:
                     System.out.println("What do you want to buy? 1 - espresso, 2 - latte, 3 - cappuccino: ");
                     String inputChoice = sc.nextLine();
+                    // Parse user input.
+                    Coffee coffee = this.handleBuyInput(inputChoice);
                     
-                    // Declare Coffee object
-                    Coffee coffee;
-    
-                    
-                    // depending on input point to correct instance field object.
-                    
-                    if (inputChoice.equalsIgnoreCase("1"))
+                    // Check for case where "back" or anything else is typed.
+                    if(coffee == null)
                     {
-                        coffee = EspressoObject;
-                    } else if (inputChoice.equalsIgnoreCase("2"))
-                    {
-                        coffee = LatteObject;
-                    } else if (inputChoice.equalsIgnoreCase("3"))
-                    {
-                        coffee = CappObject;
-                    } else {
                         this.resetState();
                         break;
                     }
+                    
                     this.buyCoffee(coffee);
                     
                     this.resetState();
@@ -106,6 +96,23 @@ public class CoffeeMachine {
                     break;
             }
         }
+    }
+    public Coffee handleBuyInput(String argument)
+    {
+        
+        // depending on input, point to correct instance field object.
+    
+        if (inputChoice.equalsIgnoreCase("1"))
+        {
+            return EspressoObject;
+        } else if (inputChoice.equalsIgnoreCase("2"))
+        {
+            return LatteObject;
+        } else if (inputChoice.equalsIgnoreCase("3"))
+        {
+            return CappObject;
+        }
+        return null;
     }
     
     public void handleExit() {
