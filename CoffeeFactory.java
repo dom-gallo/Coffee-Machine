@@ -4,22 +4,16 @@ public class CoffeeFactory
 {
 	public Coffee createCoffee(String preparation)
 	{
-		if (preparation == null || preparation.isEmpty())
+		switch (preparation)
 		{
-			return null;
+			case "1":
+				return new EspressoCoffee();
+			case "2":
+				return new LatteCoffee();
+			case "3":
+				return new CappCoffee();
+			default:
+				return null;
 		}
-		if ("latte".equalsIgnoreCase(preparation))
-		{
-			return new LatteCoffee();
-		}
-		if ("espresso".equalsIgnoreCase(preparation))
-		{
-			return new EspressoCoffee();
-		}
-		if ("capp".equalsIgnoreCase(preparation))
-		{
-			return new CappCoffee();
-		}
-		return null;
 	}
 }

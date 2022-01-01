@@ -10,17 +10,13 @@ public class CoffeeMachine {
     private int currentBeanLevel;
     private int currentCupCount;
     
-    final private Coffee LatteObject;
-    final private Coffee EspressoObject;
-    final private Coffee CappObject;
-    
+
     // State Variables
     private CurrentState currentState;
     private boolean exit = false;
 
     
-    public CoffeeMachine(int startingMoney, int startingWater, int startingMilk, int startingBeans, int startingCups,
-                         Coffee Latte, Coffee Espresso, Coffee Capp)
+    public CoffeeMachine(int startingMoney, int startingWater, int startingMilk, int startingBeans, int startingCups)
     {
         this.currentMoney = startingMoney;
         this.currentWaterLevel = startingWater;
@@ -28,19 +24,12 @@ public class CoffeeMachine {
         this.currentBeanLevel = startingBeans;
         this.currentCupCount = startingCups;
         this.currentState = CurrentState.CHOOSE_ACTION;
-        this.LatteObject =  Latte;
-        this.EspressoObject = Espresso;
-        this.CappObject = Capp;
+
     }
     
     public static void main(String[] args)
     {
-        // Coffee Factory Method
-        CoffeeFactory coffeeFactory = new CoffeeFactory();
-        //
-        CoffeeMachine coffeeMachine = new CoffeeMachine(550, 400, 540, 120, 9,
-                coffeeFactory.createCoffee("latte"), coffeeFactory.createCoffee("espresso"),
-                coffeeFactory.createCoffee("capp"));
+        CoffeeMachine coffeeMachine = new CoffeeMachine(550, 400, 540, 120, 9);
         
         
         Scanner sc = new Scanner(System.in);
@@ -63,9 +52,10 @@ public class CoffeeMachine {
                     
                     System.out.println("What do you want to buy? 1 - espresso, 2 - latte, 3 - cappuccino: ");
                     String inputChoice = sc.nextLine();
+                    CoffeeFactory coffeeFactory = new CoffeeFactory();
                     
                     // Parse user input.
-                    Coffee coffee = this.handleBuyInput(inputChoice);
+                    Coffee coffee = coffeeFactory.createCoffee(inputChoice);
                     
                     // Check for case where "back" or anything else is typed.
                     if(coffee == null)
@@ -101,25 +91,7 @@ public class CoffeeMachine {
             }
         }
     }
-    
-    public Coffee handleBuyInput(String argument)
-    {
-        
-        // depending on input, point to correct instance field object.
-    
-        if (argument.equalsIgnoreCase("1"))
-        {
-            return EspressoObject;
-        } else if (argument.equalsIgnoreCase("2"))
-        {
-            return LatteObject;
-        } else if (argument.equalsIgnoreCase("3"))
-        {
-            return CappObject;
-        }
-        return null;
-    }
-    
+
     public void handleExit() {
         this.currentState = CurrentState.EXIT;
     }
@@ -141,7 +113,6 @@ public class CoffeeMachine {
     
     public void buyCoffee(Coffee coffeeTypeToBuy)
     {
-        
         
         if (currentWaterLevel < coffeeTypeToBuy.getWaterCost())
         {
