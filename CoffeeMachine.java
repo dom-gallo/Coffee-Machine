@@ -24,20 +24,15 @@ public class CoffeeMachine {
         this.currentBeanLevel = startingBeans;
         this.currentCupCount = startingCups;
         this.currentState = CurrentState.CHOOSE_ACTION;
-
     }
     
     public static void main(String[] args)
     {
         CoffeeMachine coffeeMachine = new CoffeeMachine(550, 400, 540, 120, 9);
-        
-        
+
         Scanner sc = new Scanner(System.in);
-        
-        //
+
         coffeeMachine.startMachine(sc);
-        
-        
     }
     
     public void startMachine(Scanner sc)
@@ -49,7 +44,6 @@ public class CoffeeMachine {
             switch (this.currentState)
             {
                 case BUY:
-                    
                     System.out.println("What do you want to buy? 1 - espresso, 2 - latte, 3 - cappuccino: ");
                     String inputChoice = sc.nextLine();
                     CoffeeFactory coffeeFactory = new CoffeeFactory();
@@ -63,11 +57,8 @@ public class CoffeeMachine {
                         this.resetState();
                         break;
                     }
-                    
                     this.buyCoffee(coffee);
                     this.resetState();
-                    
-                    
                     break;
                 case FILL:
                     int[] itemsToFill = this.fillHandler(sc);
@@ -141,15 +132,10 @@ public class CoffeeMachine {
         this.setCurrentMilkLevel(this.getCurrentMilkLevel() - coffeeTypeToBuy.getMilkCost());
         this.setCurrentBeanLevel(this.getCurrentBeanLevel() - coffeeTypeToBuy.getBeanCost());
         this.setCurrentCupCount(this.getCurrentCupCount() - 1);
+        
         // Increase money in register.
         this.setCurrentMoney(this.getCurrentMoney() + coffeeTypeToBuy.getMoneyCost());
-//
-//
-//        this.currentWaterLevel -= coffeeTypeToBuy.getWaterCost();
-//        this.currentMilkLevel -= coffeeTypeToBuy.getMilkCost();
-//        this.currentBeanLevel -= coffeeTypeToBuy.getBeanCost();
-//        this.currentMoney += coffeeTypeToBuy.getMoneyCost();
-//        this.currentCupCount--;
+
 
         System.out.println("I have enough resources, making you a coffee!");
     }
