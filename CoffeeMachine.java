@@ -47,7 +47,8 @@ public class CoffeeMachine {
         
         //
         coffeeMachine.startMachine(sc);
-    
+        
+        
     }
     
     public void startMachine(Scanner sc)
@@ -100,6 +101,7 @@ public class CoffeeMachine {
             }
         }
     }
+    
     public Coffee handleBuyInput(String argument)
     {
         
@@ -163,11 +165,20 @@ public class CoffeeMachine {
             return;
         }
         
-        this.currentWaterLevel -= coffeeTypeToBuy.getWaterCost();
-        this.currentMilkLevel -= coffeeTypeToBuy.getMilkCost();
-        this.currentBeanLevel -= coffeeTypeToBuy.getBeanCost();
-        this.currentMoney += coffeeTypeToBuy.getMoneyCost();
-        this.currentCupCount--;
+        // Subtract out costs for making coffee
+        this.setCurrentWaterLevel(this.getCurrentWaterLevel() - coffeeTypeToBuy.getWaterCost());
+        this.setCurrentMilkLevel(this.getCurrentMilkLevel() - coffeeTypeToBuy.getMilkCost());
+        this.setCurrentBeanLevel(this.getCurrentBeanLevel() - coffeeTypeToBuy.getBeanCost());
+        this.setCurrentCupCount(this.getCurrentCupCount() - 1);
+        // Increase money in register.
+        this.setCurrentMoney(this.getCurrentMoney() + coffeeTypeToBuy.getMoneyCost());
+//
+//
+//        this.currentWaterLevel -= coffeeTypeToBuy.getWaterCost();
+//        this.currentMilkLevel -= coffeeTypeToBuy.getMilkCost();
+//        this.currentBeanLevel -= coffeeTypeToBuy.getBeanCost();
+//        this.currentMoney += coffeeTypeToBuy.getMoneyCost();
+//        this.currentCupCount--;
 
         System.out.println("I have enough resources, making you a coffee!");
     }
@@ -187,17 +198,18 @@ public class CoffeeMachine {
         
         
     }
-    private void fillController(int[] ingrediants) {
-        this.currentWaterLevel += ingrediants[0];
-        this.currentMilkLevel += ingrediants[1];
-        this.currentBeanLevel += ingrediants[2];
-        this.currentCupCount += ingrediants[3];
+    private void fillController(int[] ingredients) {
+        
+        this.setCurrentWaterLevel(this.getCurrentWaterLevel() + ingredients[0]);
+        this.setCurrentMilkLevel(this.getCurrentMilkLevel() + ingredients[1]);
+        this.setCurrentBeanLevel(this.getCurrentBeanLevel() + ingredients[2]);
+        this.setCurrentCupCount(this.getCurrentCupCount() + ingredients[3]);
         this.resetState();
     }
     
     public void takeMoney(){
         System.out.println("I gave you " + this.currentMoney);
-        this.currentMoney = 0;
+        this.setCurrentMoney(0);
         this.resetState();
     }
 
@@ -210,12 +222,7 @@ public class CoffeeMachine {
                 "$" + this.currentMoney+ " of money");
         this.resetState();
     }
-    public enum CoffeeTypes {
-        LATTE,
-        CAPP,
-        ESPRESSO,
-        BACK
-    }
+
     public enum CurrentState {
         BUY,
         FILL,
@@ -226,5 +233,44 @@ public class CoffeeMachine {
     }
     public void resetState() {
         this.currentState = CurrentState.CHOOSE_ACTION;
+    }
+    public int getCurrentMoney() {
+        return currentMoney;
+    }
+    
+    public void setCurrentMoney(int currentMoney) {
+        this.currentMoney = currentMoney;
+    }
+    
+    public int getCurrentWaterLevel() {
+        return currentWaterLevel;
+    }
+    
+    public void setCurrentWaterLevel(int currentWaterLevel) {
+        this.currentWaterLevel = currentWaterLevel;
+    }
+    
+    public int getCurrentMilkLevel() {
+        return currentMilkLevel;
+    }
+    
+    public void setCurrentMilkLevel(int currentMilkLevel) {
+        this.currentMilkLevel = currentMilkLevel;
+    }
+    
+    public int getCurrentBeanLevel() {
+        return currentBeanLevel;
+    }
+    
+    public void setCurrentBeanLevel(int currentBeanLevel) {
+        this.currentBeanLevel = currentBeanLevel;
+    }
+    
+    public int getCurrentCupCount() {
+        return currentCupCount;
+    }
+    
+    public void setCurrentCupCount(int currentCupCount) {
+        this.currentCupCount = currentCupCount;
     }
 }
